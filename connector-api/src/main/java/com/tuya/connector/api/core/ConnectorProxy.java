@@ -41,8 +41,6 @@ public class ConnectorProxy<T> implements InvocationHandler, Serializable {
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         try {
-            // set context
-            //setContext();
 
             if (Objects.isNull(delegate)) {
                 delegate = DelegateFactory.forRetrofit(configuration, connector);
@@ -54,22 +52,7 @@ public class ConnectorProxy<T> implements InvocationHandler, Serializable {
                 throw e;
             }
             throw ExceptionFactory.wrapException("Error invoke connector. Cause: " + e, e);
-        } finally {
-            //clearContext();
         }
     }
 
-    /*private void setContext() {
-        ContextManager contextManager = configuration.getApiDataSource().getContextManager();
-        if (Objects.nonNull(contextManager)) {
-            contextManager.start();
-        }
-    }*/
-
-    /*private void clearContext() {
-        ContextManager contextManager = configuration.getApiDataSource().getContextManager();
-        if (Objects.nonNull(contextManager)) {
-            contextManager.clear();
-        }
-    }*/
 }

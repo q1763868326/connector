@@ -26,6 +26,8 @@ public class Configuration {
 
     private List<ConnectorInterceptor> interceptors;
 
+    private static final ThreadLocal<ApiDataSource> apiDataSourceThreadLocal = new ThreadLocal<>();
+
     public Configuration() {
     }
 
@@ -41,7 +43,20 @@ public class Configuration {
     }
 
     public ApiDataSource getApiDataSource() {
-        return apiDataSource;
+        ApiDataSource apiDataSource = apiDataSourceThreadLocal.get();
+        return Objects.isNull(apiDataSource) ? this.apiDataSource : apiDataSource;
+    }
+
+    public static ThreadLocal<ApiDataSource> getApiDataSourceThreadLocal() {
+        return apiDataSourceThreadLocal;
+    }
+
+    public static void setApiDataSourceThreadLocal(ApiDataSource apiDataSource) {
+        apiDataSourceThreadLocal.set(apiDataSource);
+    }
+
+    public static void clearApiDataSourceThreadLocal() {
+        apiDataSourceThreadLocal.remove();
     }
 
     public void setApiDataSource(ApiDataSource apiDataSource) {
